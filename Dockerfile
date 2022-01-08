@@ -45,10 +45,11 @@ RUN touch /home/solidity/.z
 RUN chown -R solidity:solidity /home/solidity/.zshrc /home/solidity/.z
 RUN sed -i 's/\/bin\/ash/\/bin\/zsh/g' /etc/passwd
 # copy geth, solc, abigen and other binaries
-RUN apk --no-cache add z3-dev
 COPY --from=geth /go/bin/geth /bin/geth
 COPY --from=solc /go/bin/solc /bin/solc
 COPY --from=geth /go/bin/abigen /bin/abigen
+# add additional packages
+RUN apk --no-cache add gcc musl-dev z3-dev
 # expose ports
 EXPOSE 8545/tcp
 EXPOSE 8546/tcp
