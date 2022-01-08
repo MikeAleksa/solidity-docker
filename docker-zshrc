@@ -3,7 +3,7 @@ ZSH_THEME="ys"
 HYPHEN_INSENSITIVE="true"
 DISABLE_UPDATE_PROMPT="true"
 COMPLETION_WAITING_DOTS="true"
-plugins=(git golang z zsh-autocomplete zsh-syntax-highlighting)
+plugins=(git golang z zsh-autosuggestions zsh-syntax-highlighting)
 source $ZSH/oh-my-zsh.sh
 alias l="ls -lAhF"
 auto-ls-custom_function () {
