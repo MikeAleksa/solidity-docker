@@ -25,7 +25,7 @@ WORKDIR /go/src/github.com/solc
 RUN curl -fsSLO https://github.com/ethereum/solidity/releases/download/v${SOLIDITY_VERSION}/solidity_${SOLIDITY_VERSION}.tar.gz
 RUN tar -xzf solidity_${SOLIDITY_VERSION}.tar.gz && rm solidity_${SOLIDITY_VERSION}.tar.gz
 RUN cd solidity_${SOLIDITY_VERSION} && mkdir build && cd build && cmake .. && make
-RUN cp /go/src/github.com/solc/solidity_${SOLIDITY_VERSION}/build/solc /go/bin/solc
+RUN cp /go/src/github.com/solc/solidity_${SOLIDITY_VERSION}/build/solc/solc /go/bin/solc
 
 # # # # # # # # # # # # # # # # # # 
 # SETUP ZSH, GO, GETH, SOLC
@@ -44,6 +44,7 @@ RUN touch /home/solidity/.z
 RUN chown -R solidity:solidity /home/solidity/.zshrc /home/solidity/.z
 RUN sed -i 's/\/bin\/ash/\/bin\/zsh/g' /etc/passwd
 # copy geth, solc
+RUN apk --no-cache add z3-dev
 COPY --from=geth /go/bin/geth /bin/geth
 COPY --from=solc /go/bin/solc /bin/solc
 # expose ports
