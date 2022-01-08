@@ -14,6 +14,7 @@ RUN git clone https://github.com/ethereum/go-ethereum.git
 WORKDIR /go/src/github.com/ethereum/go-ethereum
 RUN git checkout tags/v${GETH_VERSION}
 RUN go build -ldflags="-w -s" -o /go/bin/geth cmd/geth/*.go
+RUN go build -ldflags="-w -s" -o /go/bin/abigen cmd/abigen/*.go
 
 # # # # # # # # # # # # # # # # # # 
 # BUILD SOLC
@@ -43,10 +44,11 @@ COPY docker-zshrc /home/solidity/.zshrc
 RUN touch /home/solidity/.z
 RUN chown -R solidity:solidity /home/solidity/.zshrc /home/solidity/.z
 RUN sed -i 's/\/bin\/ash/\/bin\/zsh/g' /etc/passwd
-# copy geth, solc
+# copy geth, solc, abigen and other binaries
 RUN apk --no-cache add z3-dev
 COPY --from=geth /go/bin/geth /bin/geth
 COPY --from=solc /go/bin/solc /bin/solc
+COPY --from=geth /go/bin/abigen /bin/abigen
 # expose ports
 EXPOSE 8545/tcp
 EXPOSE 8546/tcp
