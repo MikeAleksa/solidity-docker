@@ -3,8 +3,6 @@
 Docker image for Solidity development that includes:
 - Go
 - Go-Ethereum
-    - geth
-    - abigen
 - Solidity-Compiler (solc)
 - zsh, oh-my-zsh, and helpful plugins
 

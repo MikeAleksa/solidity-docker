@@ -7,14 +7,15 @@ ARG SOLIDITY_VERSION=0.8.11
 # # # # # # # # # # # # # # # # # # 
 FROM golang:${GO_VERSION}-alpine AS geth
 ARG GETH_VERSION
-RUN apk --update add --virtual build-dependencies gcc libc-dev linux-headers git
+RUN apk --update add --virtual build-dependencies make gcc libc-dev linux-headers git
 RUN mkdir -p /go/src/github.com/ethereum
 WORKDIR /go/src/github.com/ethereum 
 RUN git clone https://github.com/ethereum/go-ethereum.git
 WORKDIR /go/src/github.com/ethereum/go-ethereum
 RUN git checkout tags/v${GETH_VERSION}
-RUN go build -ldflags="-w -s" -o /go/bin/geth cmd/geth/*.go
-RUN go build -ldflags="-w -s" -o /go/bin/abigen cmd/abigen/*.go
+RUN make all
+WORKDIR /go/src/github.com/ethereum/go-ethereum/build/bin
+RUN mv * /go/bin
 
 # # # # # # # # # # # # # # # # # # 
 # BUILD SOLC
@@ -44,10 +45,21 @@ COPY docker-zshrc /home/solidity/.zshrc
 RUN touch /home/solidity/.z
 RUN chown -R solidity:solidity /home/solidity/.zshrc /home/solidity/.z
 RUN sed -i 's/\/bin\/ash/\/bin\/zsh/g' /etc/passwd
-# copy geth, solc, abigen and other binaries
-COPY --from=geth /go/bin/geth /bin/geth
+# copy solc and go-ethereum binaries
 COPY --from=solc /go/bin/solc /bin/solc
+COPY --from=geth /go/bin/abidump /bin/abidump
 COPY --from=geth /go/bin/abigen /bin/abigen
+COPY --from=geth /go/bin/bootnode /bin/bootnode
+COPY --from=geth /go/bin/clef /bin/clef
+COPY --from=geth /go/bin/ethkey /bin/ethkey
+COPY --from=geth /go/bin/faucet /bin/faucet
+COPY --from=geth /go/bin/geth /bin/geth
+COPY --from=geth /go/bin/p2psim /bin/p2psim
+COPY --from=geth /go/bin/rlpdump /bin/rlpdump
+COPY --from=geth /go/bin/checkpoint-admin /bin/checkpoint-admin
+COPY --from=geth /go/bin/devp2p /bin/devp2p
+COPY --from=geth /go/bin/evm /bin/evm
+COPY --from=geth /go/bin/puppeth /bin/puppeth
 # add additional packages
 RUN apk --no-cache add gcc musl-dev z3-dev
 # expose ports
