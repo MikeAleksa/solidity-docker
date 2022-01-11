@@ -35,15 +35,11 @@ RUN cp /go/src/github.com/solc/solidity_${SOLIDITY_VERSION}/build/solc/solc /go/
 FROM golang:${GO_VERSION}-alpine
 # setup shell environment: zsh, oh-my-zsh and plugins, nano
 RUN apk --no-cache add zsh git curl nano
-RUN adduser -D solidity
-USER solidity
 RUN sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 RUN git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 RUN git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-USER root
-COPY docker-zshrc /home/solidity/.zshrc
-RUN touch /home/solidity/.z
-RUN chown -R solidity:solidity /home/solidity/.zshrc /home/solidity/.z
+COPY docker-zshrc /root/.zshrc
+RUN touch /root/.z
 RUN sed -i 's/\/bin\/ash/\/bin\/zsh/g' /etc/passwd
 # copy solc and go-ethereum binaries
 COPY --from=solc /go/bin/solc /bin/solc
@@ -65,5 +61,5 @@ RUN apk --no-cache add gcc musl-dev z3-dev
 # expose ports
 EXPOSE 8545/tcp
 EXPOSE 8546/tcp
-USER solidity
+# USER solidity
 ENTRYPOINT [ "/bin/zsh" ]
