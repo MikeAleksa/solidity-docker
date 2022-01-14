@@ -61,5 +61,4 @@ RUN apk --no-cache add gcc musl-dev z3-dev
 # expose ports
 EXPOSE 8545/tcp
 EXPOSE 8546/tcp
-# USER solidity
 ENTRYPOINT [ "/bin/zsh" ]
