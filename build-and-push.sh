@@ -15,6 +15,6 @@ docker buildx build \
     --build-arg SOLIDITY_VERSION=$SOLIDITY_VERSION \
     --platform linux/amd64,linux/arm64 \
     --push \
-    -t mtaleksa/solidity-dev:latest \
-    -t mtaleksa/solidity-dev:$GO_VERSION-$GETH_VERSION-$SOLIDITY_VERSION \
+    -t mtaleksa/solidity-go:latest \
+    -t mtaleksa/solidity-go:$GO_VERSION-$GETH_VERSION-$SOLIDITY_VERSION \
     .

@@ -1,4 +1,4 @@
-# Solidity Development Docker Image
+# Solidity-Go Development Docker Image
 
 Docker image for Solidity development that includes:
 - Go
